@@ -1,16 +1,30 @@
-import { StatusBar } from 'expo-status-bar';
+import {useState} from 'react';
 import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity} from 'react-native';
 
 export default function App() {
+  const [gasolina, setGasolina] = useState(0)
+  const [etanol, setEtanol] = useState(0)
+  const [combustivel, setCombustivel] = useState("")
+  
+  function calculaMelhorCombustivel(){
+    const resultado = etanol/gasolina
+    if (resultado <= 0.70){
+      setCombustivel("Etanol")
+    }else{
+      setCombustivel("Gasolina")
+    }
+  }
+
   return (
     <View style={styles.container}>
       <Image style={styles.Image} source={require("./check.png")}/>
-      <Text style={styles.Text}>R$00</Text>
+      <Text style={styles.Text}>{combustivel}</Text>
       <View style={styles.View}>
-        <TextInput keyboardType='number-pad' autoFocus style={styles.TextInput} placeholderTextColor="white" placeholder='R$ Gasolina'/>
-        <TextInput keyboardType='number-pad' style={styles.TextInput} placeholderTextColor="white" placeholder='R$ Etanol'/>
+        <TextInput onChangeText={(text)=> setGasolina(parseFloat(text))} keyboardType='number-pad' autoFocus style={styles.TextInput} placeholderTextColor="white" placeholder='R$ Gasolina'/>
+        <View style={styles.barra} />
+        <TextInput onChangeText={(text)=> setEtanol(parseFloat(text))} keyboardType='number-pad' style={styles.TextInput} placeholderTextColor="white" placeholder='R$ Etanol'/>
       </View>
-      <TouchableOpacity style={styles.Touch}>
+      <TouchableOpacity onPress={calculaMelhorCombustivel} style={styles.Touch}>
         <Text style={styles.TextoButao}>
           Calcular
         </Text>
@@ -47,6 +61,8 @@ const styles = StyleSheet.create({
   },
   TextInput:{
     color: "white",
+    flex: 1,
+    textAlign: "center",
 
   },
   Touch:{
@@ -61,6 +77,10 @@ const styles = StyleSheet.create({
   TextoButao:{
     fontSize: 18,
     color: "white",
+  },
+  barra:{
+    width: 1,
+    backgroundColor: "white",
   }
 
 });
